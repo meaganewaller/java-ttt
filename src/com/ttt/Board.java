@@ -1,15 +1,22 @@
 package com.ttt;
 
 public class Board {
-	private int size;
+	int size;
+	int[][] spaceValues;
 	
-	public Board(int size) {
-		this.size = size;
+	public Board() {
+		size = 3;
+		spaceValues = new int[size][size];
 	}
 	
-	public int getSize() {
-		return size;
+	public int spaceValue(int[] space) {
+		return spaceValues[space[0]][space[1]];
 	}
+	
+	public void setSpaceValue(int[] space, int value) {
+		spaceValues[space[0]][space[1]] = value;
+	}
+	
 	
 	
 }
