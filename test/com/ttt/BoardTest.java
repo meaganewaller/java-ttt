@@ -11,4 +11,10 @@ public class BoardTest {
 		Board board = new Board(3);
 		assertEquals(3, board.getSize());
 	}
+	
+	@Test
+	public void hasSpaces() {
+		Board board = new Board(3);
+		assertEquals("---------", board.getSpaces());
+	}
 }
