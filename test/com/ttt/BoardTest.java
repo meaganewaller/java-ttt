@@ -88,4 +88,10 @@ public class BoardTest {
 	public void boardEmptyAtStart() {
 		assertEquals(true, board.isEmpty());
 	}
+	
+	@Test
+	public void boardNotEmptyWithMoves() {
+		board.setMove('X', 1);
+		assertEquals(false, board.isEmpty());
+	}
 }

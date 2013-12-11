@@ -52,7 +52,7 @@ public class Board {
 	}
 	
 	public boolean isEmpty() {
-		return true;
+		return spaces.replaceAll("[-]", "").length() == 0;
 	}
 	
 	public void setMove(char marker, String move) {
