@@ -100,4 +100,5 @@ public class BoardTest {
 		board.setMove('X', "1");
 		assertEquals("X--------", board.getSpaces());
 	}
+	
 }
