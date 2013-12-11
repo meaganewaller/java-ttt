@@ -94,4 +94,10 @@ public class BoardTest {
 		board.setMove('X', 1);
 		assertEquals(false, board.isEmpty());
 	}
+	
+	@Test
+	public void setMoveWithString() {
+		board.setMove('X', "1");
+		assertEquals("X--------", board.getSpaces());
+	}
 }
