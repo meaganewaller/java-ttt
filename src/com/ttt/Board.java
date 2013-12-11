@@ -13,11 +13,22 @@ public class Board {
 		for(int i = 0; i < (size * size); i++) spaces += "-";
 	}
 	
+	public void setMove(char marker, int move) {
+		StringBuilder newSpaces = new StringBuilder(spaces);
+		newSpaces.setCharAt(move - 1, marker);
+		spaces = newSpaces.toString();
+	}
+	
 	public int getSize() {
 		return size;
 	}
 	
 	public String getSpaces() {
 		return spaces;
+	}
+	
+	public void setMove(char marker, String move) {
+		if(!(move == ""))
+			setMove(marker, Integer.parseInt(move));
 	}
 }

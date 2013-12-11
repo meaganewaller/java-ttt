@@ -17,4 +17,11 @@ public class BoardTest {
 		Board board = new Board(3);
 		assertEquals("---------", board.getSpaces());
 	}
+	
+	@Test
+	public void setsXMove() {
+		Board board = new Board(3);
+		board.setMove('X', 5);
+		assertEquals("----X----", board.getSpaces());
+	}
 }
