@@ -52,9 +52,21 @@ public class BoardTest {
 	@Test
 	public void returnsTheEmptySpace() {
 		board.setMoves('X', new int[] { 1, 2, 3, 4, 5, 6, 7, 8 });
-		ArrayList moveList = new ArrayList() {};
+		ArrayList<Integer> moveList = new ArrayList<Integer>() {};
 		moveList.add(9);
 		assertEquals(moveList, board.getEmptySpaces());
-
+	}
+	
+	@Test
+	public void returnsMultipleEmptySpaces() {
+		board.setMoves('X', new int[] {1, 2, 3});
+		ArrayList<Integer> moveList = new ArrayList<Integer>() {};
+		moveList.add(4);
+		moveList.add(5);
+		moveList.add(6);
+		moveList.add(7);
+		moveList.add(8);
+		moveList.add(9);
+		assertEquals(moveList, board.getEmptySpaces());
 	}
 }
