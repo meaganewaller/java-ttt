@@ -1,5 +1,7 @@
 package com.ttt;
 
+import java.util.ArrayList;
+
 public class Board {
 	private int size;
 	private String spaces = "";
@@ -25,6 +27,14 @@ public class Board {
 			newSpaces.setCharAt(move - 1, marker);
 			spaces = newSpaces.toString();
 		}
+	}
+	
+	public ArrayList<Integer> getEmptySpaces() {
+		ArrayList<Integer> emptySpaces = new ArrayList<Integer>(){};
+		for(int index = 0; index < (size * size); index++)
+			if ((spaces.charAt(index) == '-'))
+				emptySpaces.add(index + 1);
+		return emptySpaces;
 	}
 	
 	public int getSize() {
