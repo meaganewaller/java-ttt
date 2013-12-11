@@ -37,6 +37,12 @@ public class Board {
 		return emptySpaces;
 	}
 	
+	public void undoMove(int index) {
+		StringBuilder newSpaces = new StringBuilder(spaces);
+		newSpaces.setCharAt(index-1, '-');
+		spaces = newSpaces.toString();
+	}
+	
 	public int getSize() {
 		return size;
 	}

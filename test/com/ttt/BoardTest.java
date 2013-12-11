@@ -52,21 +52,35 @@ public class BoardTest {
 	@Test
 	public void returnsTheEmptySpace() {
 		board.setMoves('X', new int[] { 1, 2, 3, 4, 5, 6, 7, 8 });
-		ArrayList<Integer> moveList = new ArrayList<Integer>() {};
-		moveList.add(9);
-		assertEquals(moveList, board.getEmptySpaces());
+		ArrayList<Integer> emptySpaces = new ArrayList<Integer>() {};
+		emptySpaces.add(9);
+		assertEquals(emptySpaces, board.getEmptySpaces());
 	}
 	
 	@Test
 	public void returnsMultipleEmptySpaces() {
 		board.setMoves('X', new int[] {1, 2, 3});
-		ArrayList<Integer> moveList = new ArrayList<Integer>() {};
-		moveList.add(4);
-		moveList.add(5);
-		moveList.add(6);
-		moveList.add(7);
-		moveList.add(8);
-		moveList.add(9);
-		assertEquals(moveList, board.getEmptySpaces());
+		ArrayList<Integer> emptySpaces = new ArrayList<Integer>() {};
+		emptySpaces.add(4);
+		emptySpaces.add(5);
+		emptySpaces.add(6);
+		emptySpaces.add(7);
+		emptySpaces.add(8);
+		emptySpaces.add(9);
+		assertEquals(emptySpaces, board.getEmptySpaces());
+	}
+	
+	@Test
+	public void returnsEmptyListWhenNoEmptySpaces() {
+		board.setMoves('O', new int[] {1, 2, 3, 4, 5, 6, 7, 8, 9} );
+		ArrayList<Integer> emptySpaces = new ArrayList<Integer>() {};
+		assertEquals(emptySpaces, board.getEmptySpaces());
+	}
+	
+	@Test
+	public void canUndoAMove() {
+		board.setMove('X', 1);
+		board.undoMove(1);
+		assertEquals("---------", board.getSpaces());
 	}
 }
