@@ -24,8 +24,26 @@ public class BoardTest {
 	}
 	
 	@Test
+	public void canGetSpaces() {
+		assertEquals("---------", board.getSpaces());
+	}
+	
+	@Test
 	public void setsXMove() {
 		board.setMove('X', 5);
 		assertEquals("----X----", board.getSpaces());
+	}
+	
+	@Test
+	public void setsOMove() {
+		board.setMove('O', 1);
+		assertEquals("O--------", board.getSpaces());
+	}
+	
+	@Test
+	public void canMakeMultipleMoves() {
+		int[] moves = { 4, 5, 6 };
+		board.setMoves('X', moves);
+		assertEquals("---XXX---", board.getSpaces());
 	}
 }

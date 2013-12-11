@@ -19,6 +19,14 @@ public class Board {
 		spaces = newSpaces.toString();
 	}
 	
+	public void setMoves(char marker, int[] moves) {
+		for (int move : moves) {
+			StringBuilder newSpaces = new StringBuilder(spaces);
+			newSpaces.setCharAt(move - 1, marker);
+			spaces = newSpaces.toString();
+		}
+	}
+	
 	public int getSize() {
 		return size;
 	}
