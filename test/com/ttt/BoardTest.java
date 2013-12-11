@@ -83,4 +83,9 @@ public class BoardTest {
 		board.undoMove(1);
 		assertEquals("---------", board.getSpaces());
 	}
+	
+	@Test
+	public void boardEmptyAtStart() {
+		assertEquals(true, board.isEmpty());
+	}
 }

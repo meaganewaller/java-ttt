@@ -51,6 +51,10 @@ public class Board {
 		return spaces;
 	}
 	
+	public boolean isEmpty() {
+		return true;
+	}
+	
 	public void setMove(char marker, String move) {
 		if(!(move == ""))
 			setMove(marker, Integer.parseInt(move));
