@@ -20,9 +20,17 @@ public class BoardTest {
 		assertEquals(3, board.getSize());
 	}
 	
+	
 	@Test
 	public void hasSpaces() {
 		assertEquals("---------", board.getSpaces());
+	}
+	
+	@Test
+	public void hasSpacesForSize4() {
+		Board fourBoard = new Board(4);
+		board.createSpaces();
+		assertEquals("----------------", fourBoard.getSpaces());
 	}
 	
 	@Test
