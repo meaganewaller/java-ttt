@@ -15,6 +15,10 @@ public class Board {
 		for(int i = 0; i < (size * size); i++) spaces += "-";
 	}
 	
+	public void setSpaces(String newSpaces) {
+		spaces = newSpaces;
+	}
+	
 	public void setMove(char marker, int move) {
 		StringBuilder newSpaces = new StringBuilder(spaces);
 		newSpaces.setCharAt(move - 1, marker);
