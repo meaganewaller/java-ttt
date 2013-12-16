@@ -16,7 +16,8 @@ public class ComputerPlayer implements Player {
 	}
 	
 	public Board move(Board board, int index) {
-		int move = 1;
+		UnbeatableAI ai = new UnbeatableAI(marker);
+		int move = ai.findMove(board);
 		board.setMove(marker, move);
 		return board;
 	}
