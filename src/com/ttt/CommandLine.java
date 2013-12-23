@@ -1,43 +1,50 @@
 package com.ttt;
 
+import java.io.PrintStream;
 import java.util.Scanner;
+
 import static java.lang.System.out;
 
 public class CommandLine implements UserInterface {
 	private Scanner input;
+	PrintStream output = System.out;
 	public int size;
 	
 	public CommandLine(Readable reader) {
 		input = new Scanner(reader);
 	}
+	
+	public void setOutput(PrintStream output) {
+		this.output = output;
+	}
 
 	@Override
 	public void welcomeMessage() {
-		out.println("Welcome to Tic Tac Toe");
+		output.println("Welcome to Tic Tac Toe");
 		
 	}
 
 	@Override
 	public void endGame() {
-		out.println("Good bye.");
+		output.println("Good bye.");
 	}
 
 	@Override
 	public void displayBoard(Board board) {
 		for(int index=1; index < board.getSpaces().length() + 1; index++) {
-			if(board.getSpaces().charAt(index-1) == '-') System.out.print(" " + index + " ");
-			else System.out.print(" " + board.getSpaces().charAt(index - 1) + " ");
+			if(board.getSpaces().charAt(index-1) == '-') output.print(" " + index + " ");
+			else output.print(" " + board.getSpaces().charAt(index - 1) + " ");
 			
-			if(index % board.getSize() == 0) System.out.println();
+			if(index % board.getSize() == 0) output.println();
 		}
 		
-		System.out.println();
+		output.println();
 	}
 
 	@Override
 	public void displayResult(String result) {
-		if(result.equals("tie")) out.println("Game over. It's a tie");
-		else out.println("Game over. " + result + " won");
+		if(result.equals("tie")) output.println("Game over. It's a tie");
+		else output.println("Game over. " + result + " won");
 	}
 
 	@Override
@@ -45,7 +52,7 @@ public class CommandLine implements UserInterface {
 		askPlayerOption("one");
 		String userInput = getPlayerOptionInput();
 		while(invalidPlayerOptionInput(userInput)) {
-			out.println("Please enter correct player type('h' or 'c'): ");
+			output.println("Please enter correct player type('h' or 'c'): ");
 			userInput = getPlayerOptionInput();
 		}
 		return userInput;
@@ -56,7 +63,7 @@ public class CommandLine implements UserInterface {
 		askPlayerOption("two");
 		String userInput = getPlayerOptionInput();
 		while(invalidPlayerOptionInput(userInput)) {
-			out.println("Please enter correct player type('h' or 'c'):");
+			output.println("Please enter correct player type('h' or 'c'):");
 			userInput = getPlayerOptionInput();
 		}
 		return userInput;
@@ -78,9 +85,9 @@ public class CommandLine implements UserInterface {
 
 	@Override
 	public int askPlayerMove() {
-		out.println("Enter your move: ");
+		output.println("Enter your move: ");
 		while(!input.hasNextInt()) {
-			out.println("Please enter a valid move: ");
+			output.println("Please enter a valid move: ");
 			input.next();
 		}
 		int userInput = input.nextInt();
@@ -93,24 +100,24 @@ public class CommandLine implements UserInterface {
 		askUserPlayAgain();
 		String userInput = input.nextLine().toLowerCase();
 		while(!userInput.equals("n") && !userInput.equals("y")) {
-			out.println("Please choose (y/n): ");
+			output.println("Please choose (y/n): ");
 			userInput = input.nextLine().toLowerCase();
 		}
 		return userInput.equals("y");
 	}
 	
 	public void askUserPlayAgain() {
-		out.println("Would you like to play again? Y/N: ");
+		output.println("Would you like to play again? Y/N: ");
 	}
 	
 	public void askPlayerOption(String player) {
-		out.println("Please choose player " + player + " type('h' or 'c'): ");
+		output.println("Please choose player " + player + " type('h' or 'c'): ");
 	}
 	
 	@Override
 	public int askBoardSize() {
 		int userInput;
-		out.println("Enter board size(3 or 4): ");
+		output.println("Enter board size(3 or 4): ");
 		while(!input.hasNextInt()) {
 			out.println("Please enter the board size(3 or 4): ");
 			input.next();
@@ -118,7 +125,7 @@ public class CommandLine implements UserInterface {
 		
 		userInput = input.nextInt();
 		while(userInput != 3 && userInput != 4) {
-			out.println("Please enter board size(3 or 4): ");
+			output.println("Please enter board size(3 or 4): ");
 			userInput = input.nextInt();
 		}
 		
@@ -126,7 +133,4 @@ public class CommandLine implements UserInterface {
 		return userInput;
 		
 	}
-	
-	
-
 }
