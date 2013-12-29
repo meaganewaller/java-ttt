@@ -1,4 +1,7 @@
 package com.ttt;
+
+import java.io.IOException;
+
 public class Game {
 	private Board board;
 	private Player firstPlayer, secondPlayer;
@@ -9,19 +12,19 @@ public class Game {
 		this.ui = ui;
 	}
 	
-	public void playGame() {
+	public void playGame() throws IOException {
 		startGame();
 		while(!boardRules.isOver()) makePlayerMoves();
 		endGame();
 	}
 	
-	public void startGame() {
+	public void startGame() throws IOException {
 		ui.welcomeMessage();
 		askSettings();
 		ui.displayBoard(board);
 	}
 	
-	public void makePlayerMoves() {
+	public void makePlayerMoves() throws NumberFormatException, IOException {
 		if(makePlayerMove(firstPlayer) && !boardRules.isOver()) {
 			ui.displayBoard(board);
 			makePlayerMove(secondPlayer);
@@ -29,7 +32,7 @@ public class Game {
 		if(!boardRules.isOver()) ui.displayBoard(board);
 	}
 	
-	public boolean makePlayerMove(Player player) {
+	public boolean makePlayerMove(Player player) throws NumberFormatException, IOException {
 		if(player.isHuman()) {
 			board = player.move(board, ui.askPlayerMove());
 		} else {
@@ -38,23 +41,23 @@ public class Game {
 		return true;
 	}
 	
-	public void askSettings() {
+	public void askSettings() throws IOException {
 		askFirstPlayer();
 		askSecondPlayer();
 		askBoardSize();
 	}
 	
-	public void askFirstPlayer() {
+	public void askFirstPlayer() throws IOException {
 		String first = ui.askFirstPlayerOption();
 		firstPlayer = getPlayer(first, 'X');
 	}
 	
-	public void askSecondPlayer() {
+	public void askSecondPlayer() throws IOException {
 		String second = ui.askSecondPlayerOption();
 		secondPlayer = getPlayer(second, 'O');
 	}
 	
-	public void askBoardSize() {
+	public void askBoardSize() throws NumberFormatException, IOException {
 		int boardSize=  ui.askBoardSize();
 		board = new Board(boardSize);
 		boardRules = new BoardRules(board);
@@ -67,7 +70,7 @@ public class Game {
 		return player;
 	}
 	
-	public void endGame() {
+	public void endGame() throws IOException {
 		ui.displayResult(result());
 		ui.displayBoard(board);
 		if(ui.askPlayAgain()) {

@@ -3,6 +3,7 @@ package com.ttt;
 import static org.junit.Assert.*;
 
 import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Reader;
 import java.io.StringReader;
@@ -10,9 +11,19 @@ import java.io.StringReader;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.ttt.mocks.MockOutputStream;
+import com.ttt.mocks.MockPrintStream;
+
 public class CommandLineTest {
-	private ByteArrayOutputStream output = new ByteArrayOutputStream();
+	OutputStream outputStream  = new MockOutputStream();
+	MockPrintStream printStream = new MockPrintStream(outputStream);
 	CommandLine ui;
+	
+	@Test
+	public void displaysWelcomeMessage() {
+	}
+	
+	/*
 	
 	@Before
 	public void initialize() {
@@ -172,5 +183,5 @@ public class CommandLineTest {
 	
 
 	
-
+*/
 }

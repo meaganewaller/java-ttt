@@ -1,27 +1,31 @@
 package com.ttt;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
-import java.util.Scanner;
 
-import static java.lang.System.out;
 
 public class CommandLine implements UserInterface {
-	private Scanner input;
 	PrintStream output = System.out;
+	InputStream input = System.in;
+	BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(input));
+	Validations validate = new Validations();
+
 	public int size;
-	
-	public CommandLine(Readable reader) {
-		input = new Scanner(reader);
-	}
 	
 	public void setOutput(PrintStream output) {
 		this.output = output;
+	}
+	
+	public void setBufferedReader(BufferedReader bufferedReader) {
+		this.bufferedReader = bufferedReader;
 	}
 
 	@Override
 	public void welcomeMessage() {
 		output.println("Welcome to Tic Tac Toe");
-		
 	}
 
 	@Override
@@ -37,7 +41,6 @@ public class CommandLine implements UserInterface {
 			
 			if(index % board.getSize() == 0) output.println();
 		}
-		
 		output.println();
 	}
 
@@ -48,7 +51,7 @@ public class CommandLine implements UserInterface {
 	}
 
 	@Override
-	public String askFirstPlayerOption() {
+	public String askFirstPlayerOption() throws IOException {
 		askPlayerOption("one");
 		String userInput = getPlayerOptionInput();
 		while(invalidPlayerOptionInput(userInput)) {
@@ -59,7 +62,7 @@ public class CommandLine implements UserInterface {
 	}
 
 	@Override
-	public String askSecondPlayerOption() {
+	public String askSecondPlayerOption() throws IOException {
 		askPlayerOption("two");
 		String userInput = getPlayerOptionInput();
 		while(invalidPlayerOptionInput(userInput)) {
@@ -69,39 +72,61 @@ public class CommandLine implements UserInterface {
 		return userInput;
 	}
 	
+	@Override
+	public int askBoardSize() throws NumberFormatException, IOException {
+		output.println("Enter board size(3 or 4): ");
+		String userInput = bufferedReader.readLine();
+		int boardSize = validate.boardSize(userInput);
+		if(!validate.validBoardSize(boardSize))
+			output.println("Enter the board size(3 or 4): ");
+			userInput = bufferedReader.readLine();
+		this.size = boardSize;
+		return boardSize;
+	}
+	
 	public boolean invalidPlayerOptionInput(String input) {
-		return !input.toLowerCase().equals("h") && !input.toLowerCase().equals("c");
+		return validate.isPlayerOptionInvalid(input);
 	}
 
 	@Override
-	public String getPlayerOptionInput() {
-		return input.nextLine();
+	public String getPlayerOptionInput() throws IOException {
+		return bufferedReader.readLine();
 	}
 
 	@Override
-	public String getBoardOptionInput() {
-		return input.nextLine();
+	public String getBoardOptionInput() throws IOException {
+		return bufferedReader.readLine();
 	}
 
 	@Override
-	public int askPlayerMove() {
+	public int askPlayerMove() throws NumberFormatException, IOException {
 		output.println("Enter your move: ");
-		while(!input.hasNextInt()) {
+		String userInput = bufferedReader.readLine();
+		int move = validate.parsePlayerMove(userInput);
+		while(!validPlayerMove(move)) {
 			output.println("Please enter a valid move: ");
-			input.next();
-		}
-		int userInput = input.nextInt();
-		return userInput;
+			userInput = getPlayerMove();
+		}	
+		return move;
+	}
+
+	
+	public boolean validPlayerMove(int move) {
+		return validate.isPlayerMoveValid(move);
+	}
+	
+	public String getPlayerMove() throws IOException {
+		return bufferedReader.readLine();
 	}
 	
 
 	@Override
-	public boolean askPlayAgain() {
+	public boolean askPlayAgain() throws IOException {
 		askUserPlayAgain();
-		String userInput = input.nextLine().toLowerCase();
-		while(!userInput.equals("n") && !userInput.equals("y")) {
+		String userInput = bufferedReader.readLine().toLowerCase();
+		while(!validate.isUserPlayingAgain(userInput)) {
 			output.println("Please choose (y/n): ");
-			userInput = input.nextLine().toLowerCase();
+			userInput = bufferedReader.readLine().toLowerCase();
 		}
 		return userInput.equals("y");
 	}
@@ -114,23 +139,5 @@ public class CommandLine implements UserInterface {
 		output.println("Please choose player " + player + " type('h' or 'c'): ");
 	}
 	
-	@Override
-	public int askBoardSize() {
-		int userInput;
-		output.println("Enter board size(3 or 4): ");
-		while(!input.hasNextInt()) {
-			out.println("Please enter the board size(3 or 4): ");
-			input.next();
-		}
-		
-		userInput = input.nextInt();
-		while(userInput != 3 && userInput != 4) {
-			output.println("Please enter board size(3 or 4): ");
-			userInput = input.nextInt();
-		}
-		
-		this.size = userInput;
-		return userInput;
-		
-	}
+	
 }

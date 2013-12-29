@@ -3,6 +3,7 @@ package com.ttt;
 import static org.junit.Assert.*;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.io.Reader;
 import java.io.StringReader;
@@ -25,33 +26,33 @@ public class GameTest {
 	}
 	
 	@Test
-	public void gameHasBoardSpaces() {
+	public void gameHasBoardSpaces() throws IOException {
 		game.startGame();
 		assertEquals("---------", game.getBoard().getSpaces());
 	}
 	
 	@Test
-	public void gameHasFirstPlayer() {
+	public void gameHasFirstPlayer() throws IOException {
 		game.startGame();
 		assertEquals('X', game.getFirstPlayer().getMarker());
 		assertTrue(game.getFirstPlayer().isHuman());
 	}
 	
 	@Test
-	public void gameHasSecondPlayer() {
+	public void gameHasSecondPlayer() throws IOException {
 		game.startGame();
 		assertEquals('O', game.getSecondPlayer().getMarker());
 		assertTrue(game.getFirstPlayer().isHuman());
 	}
 	
 	@Test
-	public void hasUI() {
+	public void hasUI() throws IOException {
 		game.startGame();
 		assertEquals(ui, game.getUI());
 	}
 	
 	@Test
-	public void startGame() {
+	public void startGame() throws IOException {
 		game.startGame();
 		assertEquals(game.getFirstPlayer().getMarker(), 'X');
 		assertEquals(game.getSecondPlayer().getMarker(), 'O');
@@ -59,7 +60,7 @@ public class GameTest {
 	}
 	
 	@Test
-	public void endsGame() {
+	public void endsGame() throws IOException {
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(output));
 		game.startGame();
@@ -67,14 +68,14 @@ public class GameTest {
 	}
 	
 	@Test
-	public void makesPlayerMoves() {
+	public void makesPlayerMoves() throws IOException {
 		game.startGame();
 		game.makePlayerMoves();
 		assertEquals("XO-------", game.getBoard().getSpaces());
 	}
 	
 	@Test
-	public void makeAIMoves() {
+	public void makeAIMoves() throws IOException {
 		game.startGame();
 		AIMock ai = new AIMock('X');
 		game.makePlayerMove(ai);
@@ -82,7 +83,7 @@ public class GameTest {
 	}
 	
 	@Test
-	public void hasBoardRules() {
+	public void hasBoardRules() throws IOException {
 		game.startGame();
 		assertEquals(game.getBoardRules().getClass(), BoardRules.class);
 	}
