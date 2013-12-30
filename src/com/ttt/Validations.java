@@ -30,7 +30,8 @@ public class Validations {
 	}
 	
 	public boolean isUserPlayingAgain(String input) {
-		return true;
+		if(input.equals("y")) return true;
+		return false;
 	}
 
 }
