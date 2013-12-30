@@ -2,26 +2,33 @@ package com.ttt;
 
 import static org.junit.Assert.*;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.PrintStream;
-import java.io.Reader;
-import java.io.StringReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import com.ttt.mocks.AIMock;
-import com.ttt.mocks.MockUI;
+import com.ttt.mocks.MockBufferedReader;
+import com.ttt.mocks.MockCommandLine;
+import com.ttt.mocks.MockOutputStream;
+import com.ttt.mocks.MockPrintStream;
+
 
 public class GameTest {
+	OutputStream outputStream = new MockOutputStream();
+	MockPrintStream printStream = new MockPrintStream(outputStream);
+	MockCommandLine ui;
 	Game game;
-	MockUI ui;
 	
 	@Before
 	public void setUp() {
-		Reader reader = new StringReader("1\n2\n");
-		ui = new MockUI(reader);
+		ui = new MockCommandLine();
+		printStream.setStringHistory(new ArrayList<String>());
+		ui.setOutput(printStream);
 		game = new Game(ui);
 	}
 	
@@ -37,8 +44,9 @@ public class GameTest {
 		assertEquals('X', game.getFirstPlayer().getMarker());
 		assertTrue(game.getFirstPlayer().isHuman());
 	}
+
 	
-	@Test
+	@Test	
 	public void gameHasSecondPlayer() throws IOException {
 		game.startGame();
 		assertEquals('O', game.getSecondPlayer().getMarker());
@@ -52,26 +60,22 @@ public class GameTest {
 	}
 	
 	@Test
-	public void startGame() throws IOException {
+	public void canStartGame() throws IOException {
 		game.startGame();
 		assertEquals(game.getFirstPlayer().getMarker(), 'X');
 		assertEquals(game.getSecondPlayer().getMarker(), 'O');
 		assertEquals(game.getBoard().getSize(), 3);
 	}
 	
+	// Not sure about this one
 	@Test
-	public void endsGame() throws IOException {
-		ByteArrayOutputStream output = new ByteArrayOutputStream();
-		System.setOut(new PrintStream(output));
+	public void makesMoves() throws IOException {
 		game.startGame();
-		game.endGame();
-	}
-	
-	@Test
-	public void makesPlayerMoves() throws IOException {
-		game.startGame();
+		MockBufferedReader bufferedReader = new MockBufferedReader(new InputStreamReader(ui.input));
+		ui.setBufferedReader(bufferedReader);
+		bufferedReader.setInputHistory(new ArrayList<String>(Arrays.asList("1")));
 		game.makePlayerMoves();
-		assertEquals("XO-------", game.getBoard().getSpaces());
+		assertEquals("O--------", game.getBoard().getSpaces());
 	}
 	
 	@Test
@@ -101,5 +105,3 @@ public class GameTest {
 		assertEquals(true, player.isHuman());
 	}
 }
-
-	
