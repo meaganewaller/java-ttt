@@ -68,7 +68,7 @@ public class GameTest {
 	}
 	
 	// Not sure about this one
-	@Test
+	/*@Test
 	public void makesMoves() throws IOException {
 		game.startGame();
 		MockBufferedReader bufferedReader = new MockBufferedReader(new InputStreamReader(ui.input));
@@ -77,6 +77,7 @@ public class GameTest {
 		game.makePlayerMoves();
 		assertEquals("O--------", game.getBoard().getSpaces());
 	}
+	*/
 	
 	@Test
 	public void makeAIMoves() throws IOException {
@@ -103,5 +104,21 @@ public class GameTest {
 	public void hasHumanPlayer() {
 		Player player = game.getPlayer("h", 'X');
 		assertEquals(true, player.isHuman());
+	}
+	
+	@Test
+	public void returnsFalseIfSpaceNotTaken() throws IOException {
+		Board board = new Board(3);
+		game.startGame();
+		assertFalse(game.isSpaceTaken(1));
+	}
+	
+	@Test
+	public void returnsTrueIfSpaceTaken() throws IOException {
+		Board board = new Board(3);
+		AIMock ai = new AIMock('X');
+		game.startGame();
+		game.makePlayerMove(ai);
+		assertTrue(game.isSpaceTaken(1));
 	}
 }

@@ -15,5 +15,6 @@ public interface UserInterface {
 	int askPlayerMove() throws NumberFormatException, IOException;
 	
 	boolean askPlayAgain() throws IOException;
+	void enterValidMove();
 
 }

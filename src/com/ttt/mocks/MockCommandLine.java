@@ -73,4 +73,10 @@ public class MockCommandLine implements UserInterface {
 		return false;
 	}
 
+	@Override
+	public void enterValidMove() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

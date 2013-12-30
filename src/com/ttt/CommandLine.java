@@ -129,6 +129,11 @@ public class CommandLine implements UserInterface {
 	public void askPlayerOption(String player) {
 		output.println("Please choose player " + player + " type('h' or 'c'): ");
 	}
+
+	@Override
+	public void enterValidMove() {
+		output.println("Please enter a valid move");
+	}
 	
 	
 }

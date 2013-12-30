@@ -34,10 +34,25 @@ public class Game {
 	
 	public boolean makePlayerMove(Player player) throws NumberFormatException, IOException {
 		if(player.isHuman()) {
-			board = player.move(board, ui.askPlayerMove());
+			board = player.move(board, makeHumanMove());
 		} else {
 			board = player.move(board,  0);
 		}
+		return true;
+	}
+	
+	public int makeHumanMove() throws NumberFormatException, IOException {
+		int move = ui.askPlayerMove();
+		while(isSpaceTaken(move)) {
+			ui.enterValidMove();
+			ui.displayBoard(board);
+			move = ui.askPlayerMove();
+		}
+		return move;
+	}
+	
+	public boolean isSpaceTaken(int space) {
+		if(board.getEmptySpaces().contains(space)) return false;
 		return true;
 	}
 	
