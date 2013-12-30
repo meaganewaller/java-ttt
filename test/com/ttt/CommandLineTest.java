@@ -155,4 +155,10 @@ public class CommandLineTest {
 		ui.askPlayerOption("one");
 		assertEquals("Please choose player one type('h' or 'c'): ", printStream.lastOutput());
 	}
+	
+	@Test
+	public void displaysMessageToEnterValidMove() {
+		ui.enterValidMove();
+		assertEquals("Please enter a valid move", printStream.lastOutput());
+	}
 }
