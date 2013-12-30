@@ -34,18 +34,18 @@ public class ValidationsTest {
 	}
 	
 	@Test
-	public void returnsTrueIf3BoardSize() {
-		assertTrue(validations.validBoardSize(3));
+	public void notInvalidForSize3() {
+		assertFalse(validations.isBoardSizeInvalid(3));
 	}
 	
 	@Test
-	public void returnsTrueIf4BoardSize() {
-		assertTrue(validations.validBoardSize(4));
+	public void notInvalidForSize4() {
+		assertFalse(validations.isBoardSizeInvalid(4));
 	}
 	
 	@Test
-	public void returnsFalseIfWrongBoardSize() {
-		assertFalse(validations.validBoardSize(5));
+	public void invalidForOtherSizes() {
+		assertTrue(validations.isBoardSizeInvalid(5));
 	}
 	
 	@Test
@@ -54,13 +54,13 @@ public class ValidationsTest {
 	}
 	
 	@Test
-	public void returnsTrueIfPlayerMoveValid() {
-		assertTrue(validations.isPlayerMoveValid(5));
+	public void returnsFalseIfPlayerMoveValid() {
+		assertFalse(validations.isPlayerMoveInvalid(5));
 	}
 	
 	@Test
-	public void returnsFalseIfPlayerMoveInvalid() {
-		assertFalse(validations.isPlayerMoveValid(20));
+	public void returnsTrueIfPlayerMoveInvalid() {
+		assertTrue(validations.isPlayerMoveInvalid(20));
 	}
 	
 	@Test

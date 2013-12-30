@@ -10,8 +10,6 @@ public interface UserInterface {
 	
 	String askFirstPlayerOption() throws IOException;
 	String askSecondPlayerOption() throws IOException;
-	String getPlayerOptionInput() throws IOException;
-	String getBoardOptionInput() throws IOException;
 	
 	int askBoardSize() throws NumberFormatException, IOException;
 	int askPlayerMove() throws NumberFormatException, IOException;

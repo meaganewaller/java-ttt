@@ -53,10 +53,10 @@ public class CommandLine implements UserInterface {
 	@Override
 	public String askFirstPlayerOption() throws IOException {
 		askPlayerOption("one");
-		String userInput = getPlayerOptionInput();
+		String userInput = getPlayerInput();
 		while(invalidPlayerOptionInput(userInput)) {
 			output.println("Please enter correct player type('h' or 'c'): ");
-			userInput = getPlayerOptionInput();
+			userInput = getPlayerInput();
 		}
 		return userInput;
 	}
@@ -64,10 +64,10 @@ public class CommandLine implements UserInterface {
 	@Override
 	public String askSecondPlayerOption() throws IOException {
 		askPlayerOption("two");
-		String userInput = getPlayerOptionInput();
+		String userInput = getPlayerInput();
 		while(invalidPlayerOptionInput(userInput)) {
 			output.println("Please enter correct player type('h' or 'c'):");
-			userInput = getPlayerOptionInput();
+			userInput = getPlayerInput();
 		}
 		return userInput;
 	}
@@ -75,64 +75,55 @@ public class CommandLine implements UserInterface {
 	@Override
 	public int askBoardSize() throws NumberFormatException, IOException {
 		output.println("Enter board size(3 or 4): ");
-		String userInput = bufferedReader.readLine();
+		String userInput = getPlayerInput();
 		int boardSize = validate.boardSize(userInput);
-		if(!validate.validBoardSize(boardSize))
+		while(invalidBoardSize(boardSize)) {
 			output.println("Enter the board size(3 or 4): ");
-			userInput = bufferedReader.readLine();
+			userInput = getPlayerInput();
+		}
 		this.size = boardSize;
 		return boardSize;
 	}
 	
+	public String getPlayerInput() throws IOException {
+		return bufferedReader.readLine();
+	}
+
 	public boolean invalidPlayerOptionInput(String input) {
 		return validate.isPlayerOptionInvalid(input);
 	}
-
-	@Override
-	public String getPlayerOptionInput() throws IOException {
-		return bufferedReader.readLine();
-	}
-
-	@Override
-	public String getBoardOptionInput() throws IOException {
-		return bufferedReader.readLine();
+	
+	public boolean invalidBoardSize(int size) {
+		return validate.isBoardSizeInvalid(size);
 	}
 
 	@Override
 	public int askPlayerMove() throws NumberFormatException, IOException {
 		output.println("Enter your move: ");
-		String userInput = bufferedReader.readLine();
+		String userInput = getPlayerInput();
 		int move = validate.parsePlayerMove(userInput);
-		while(!validPlayerMove(move)) {
+		while(invalidPlayerMove(move)) {
 			output.println("Please enter a valid move: ");
-			userInput = getPlayerMove();
+			userInput = getPlayerInput();
 		}	
 		return move;
 	}
 
 	
-	public boolean validPlayerMove(int move) {
-		return validate.isPlayerMoveValid(move);
-	}
-	
-	public String getPlayerMove() throws IOException {
-		return bufferedReader.readLine();
+	public boolean invalidPlayerMove(int move) {
+		return validate.isPlayerMoveInvalid(move);
 	}
 	
 
 	@Override
 	public boolean askPlayAgain() throws IOException {
 		askUserPlayAgain();
-		String userInput = bufferedReader.readLine().toLowerCase();
-		while(!validate.isUserPlayingAgain(userInput)) {
-			output.println("Please choose (y/n): ");
-			userInput = bufferedReader.readLine().toLowerCase();
-		}
-		return userInput.equals("y");
+		String userInput = getPlayerInput().toLowerCase();
+		return validate.isUserPlayingAgain(userInput);
 	}
 	
 	public void askUserPlayAgain() {
-		output.println("Would you like to play again? Y/N: ");
+		output.println("Press 'y' to play again, press anything else to quit");
 	}
 	
 	public void askPlayerOption(String player) {
