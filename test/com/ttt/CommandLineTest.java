@@ -1,176 +1,164 @@
 package com.ttt;
 
+
 import static org.junit.Assert.*;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-import java.io.Reader;
-import java.io.StringReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import com.ttt.mocks.MockBufferedReader;
+import com.ttt.mocks.MockOutputStream;
+import com.ttt.mocks.MockPrintStream;
+
 public class CommandLineTest {
-	private ByteArrayOutputStream output = new ByteArrayOutputStream();
+	OutputStream outputStream  = new MockOutputStream();
+	MockPrintStream printStream = new MockPrintStream(outputStream);
 	CommandLine ui;
 	
 	@Before
-	public void initialize() {
-		System.setOut(new PrintStream(output));
-		Reader reader = new StringReader("3\n4\n5\n6");
-		ui = new CommandLine(reader);
+	public void setUp() {
+		ui = new CommandLine();
+		printStream.setStringHistory(new ArrayList<String>());
+		ui.setOutput(printStream);
 	}
 	
-	@Test 
+	@Test
 	public void displaysWelcomeMessage() {
 		ui.welcomeMessage();
-		assertEquals("Welcome to Tic Tac Toe\n", output.toString());
+		assertEquals("Welcome to Tic Tac Toe", printStream.lastOutput());
 	}
 	
 	@Test
-	public void displaysEndGameMessage() {
+	public void itPrintsEndMessage() {
 		ui.endGame();
-		assertEquals("Good bye.\n", output.toString());
+		assertEquals("Good bye.", printStream.lastOutput());
 	}
 	
 	@Test
-	public void asksFirstPlayer() {
-		ui.askPlayerOption("one");
-		assertEquals("Please choose player one type('h' or 'c'): \n", output.toString());
-	}
-	
-	@Test
-	public void asksSecondPlayer() {
-		ui.askPlayerOption("two");
-		assertEquals("Please choose player two type('h' or 'c'): \n", output.toString());
-	}
-	
-	@Test
-	public void askForBoardSize() {
-		ui.askBoardSize();
-		assertEquals("Enter board size(3 or 4): \n", output.toString());
-	}
-
-	@Test
-	public void cantEnterWrongSizeBoard() {
-		Reader reader = new StringReader("1\n4\n");
-		CommandLine ui = new CommandLine(reader);
-		assertEquals(4, ui.askBoardSize());
-	}
-	
-	@Test
-	public void readsUserInputForGettingPlayerOptions() {
-		assertTrue(ui.getPlayerOptionInput().matches("3"));
-	}
-	
-	@Test
-	public void readsUserInputForGettingBoardSize() {
-		System.out.println(ui.getBoardOptionInput());
-		assertTrue(ui.getBoardOptionInput().matches("4"));
-	}
-	
-	@Test
-	public void firstPlayerComputer() {
-		Reader reader = new StringReader("c\n");
-		CommandLine ui = new CommandLine(reader);
-		assertEquals("c", ui.askFirstPlayerOption());
-	}
-	
-	@Test
-	public void firstPlayerHuman() {
-		Reader reader = new StringReader("h\n");
-		CommandLine ui = new CommandLine(reader);
-		assertEquals("h", ui.askFirstPlayerOption());
-	}
-	
-	@Test
-	public void dealsWithInvalidFirstPlayerInput() {
-		Reader reader = new StringReader("t\nh\n");
-		CommandLine ui = new CommandLine(reader);
-		assertEquals("h", ui.askFirstPlayerOption());
-	}
-	
-	@Test
-	public void asksSecondPlayerHumanOption() {
-		Reader reader = new StringReader("h\n");
-		CommandLine ui = new CommandLine(reader);
-		assertEquals("h", ui.askSecondPlayerOption());
-	}
-	
-	@Test
-	public void askSecondPlayerAIOption() {
-		Reader reader = new StringReader("c\n");
-		CommandLine ui = new CommandLine(reader);
-		assertEquals("c", ui.askSecondPlayerOption());
-	}
-	
-	@Test
-	public void noInvalidInputSecondPlayer() {
-		Reader reader = new StringReader("q\nh\n");
-		CommandLine ui = new CommandLine(reader);
-		assertEquals("h", ui.askSecondPlayerOption());
-	}
-	
-	@Test
-	public void askForMove() {
-		Reader reader = new StringReader("t\n3\n");
-		CommandLine ui = new CommandLine(reader);
-		assertEquals(3, ui.askPlayerMove());
-	}
-	
-	@Test
-	public void playerCanPlayAgain() {
-		Reader reader = new StringReader("Y\n");
-		CommandLine ui = new CommandLine(reader);
-		assertEquals(true, ui.askPlayAgain());
-	}
-	
-	@Test
-	public void asksForPlayersMove() {
-		ui.askPlayerMove();
-		assertEquals("Enter your move: \n", output.toString());
-	}
-	
-	@Test
-	public void displaysBoard() {
+	public void itDisplaysTheBoard() {
 		Board board = new Board(3);
 		ui.displayBoard(board);
-		assertTrue(output.toString().contains("1"));
-		assertTrue(output.toString().contains("2"));
-		assertTrue(output.toString().contains("3"));
-		assertTrue(output.toString().contains("4"));
-		assertTrue(output.toString().contains("5"));
-		assertTrue(output.toString().contains("6"));
-		assertTrue(output.toString().contains("7"));
-		assertTrue(output.toString().contains("8"));
-		assertTrue(output.toString().contains("9"));
+		assertEquals(" 9 ", printStream.lastOutput());
 	}
 	
 	@Test
-	public void displaysBoardWithMoves() {
-		Board board = new Board(3);
-		board.setMove('X', 1);
-		ui.displayBoard(board);
-		assertFalse(output.toString().contains("1"));
-	}
-	
-	@Test
-	public void displaysResultOfGame() {
-		ui.displayResult("tie");
-		assertEquals("Game over. It's a tie\n", output.toString());
-	}
-	
-	@Test
-	public void displayResultForWinner() {
+	public void displaysResultForXWin() {
 		ui.displayResult("X");
-		assertEquals("Game over. X won\n", output.toString());
+		assertEquals("Game over. X won", printStream.lastOutput());
 	}
 	
+	@Test
+	public void displayResultForOWin() {
+		ui.displayResult("O");
+		assertEquals("Game over. O won", printStream.lastOutput());
+	}
 	
+	@Test
+	public void diplaysResultForTie() {
+		ui.displayResult("tie");
+		assertEquals("Game over. It's a tie", printStream.lastOutput());
+	}
 	
-
+	@Test
+	public void asksPlayerForFirstPlayer() throws IOException {
+		MockBufferedReader bufferedReader = new MockBufferedReader(new InputStreamReader(ui.input));
+		ui.setBufferedReader(bufferedReader);
+		bufferedReader.setInputHistory(new ArrayList<String>(Arrays.asList("h")));
+		ui.askFirstPlayerOption();
+		assertEquals("h", bufferedReader.readLine());
+	}
 	
-
+	@Test
+	public void asksPlayerForSecondPlayer() throws IOException {
+		MockBufferedReader bufferedReader = new MockBufferedReader(new InputStreamReader(ui.input));
+		ui.setBufferedReader(bufferedReader);
+		bufferedReader.setInputHistory(new ArrayList<String>(Arrays.asList("c")));
+		ui.askSecondPlayerOption();
+		assertEquals("c", bufferedReader.readLine());
+	}
 	
-
+	@Test
+	public void asksPlayerForBoardSize() throws NumberFormatException, IOException {
+		MockBufferedReader bufferedReader = new MockBufferedReader(new InputStreamReader(ui.input));
+		ui.setBufferedReader(bufferedReader);
+		bufferedReader.setInputHistory(new ArrayList<String>(Arrays.asList("3")));
+		ui.askBoardSize();
+		assertEquals("3", bufferedReader.readLine());
+	}
+	
+	@Test
+	public void returnsTrueIfInvalidPlayer() {
+		assertTrue(ui.invalidPlayerOptionInput("g"));
+	}
+	
+	@Test
+	public void returnsFalseIfValidPlayer() {
+		assertFalse(ui.invalidPlayerOptionInput("c"));
+	}
+	
+	@Test
+	public void returnsTrueIfInvalidBoardSize() {
+		assertTrue(ui.invalidBoardSize(5));
+	}
+	
+	@Test
+	public void returnsFalseIfValidBoardSize() {
+		assertFalse(ui.invalidBoardSize(3));
+	}
+	
+	@Test
+	public void getsPlayerInput() throws IOException {
+		MockBufferedReader bufferedReader = new MockBufferedReader(new InputStreamReader(ui.input));
+		ui.setBufferedReader(bufferedReader);
+		bufferedReader.setInputHistory(new ArrayList<String>(Arrays.asList("3")));
+		ui.getPlayerInput();
+		assertEquals("3", bufferedReader.readLine());
+	}
+	
+	@Test
+	public void getsPlayerMove() throws NumberFormatException, IOException {
+		MockBufferedReader bufferedReader = new MockBufferedReader(new InputStreamReader(ui.input));
+		ui.setBufferedReader(bufferedReader);
+		bufferedReader.setInputHistory(new ArrayList<String>(Arrays.asList("3")));
+		ui.askPlayerMove();
+		assertEquals("3", bufferedReader.readLine());
+	}
+	
+	@Test
+	public void returnsFalseIfValidMove() {
+		assertFalse(ui.invalidPlayerMove(5));
+	}
+	
+	@Test
+	public void askUsersForPlayAgain() throws IOException {
+		MockBufferedReader bufferedReader = new MockBufferedReader(new InputStreamReader(ui.input));
+		ui.setBufferedReader(bufferedReader);
+		bufferedReader.setInputHistory(new ArrayList<String>(Arrays.asList("n")));
+		ui.askPlayAgain();
+		assertEquals("n", bufferedReader.readLine());
+	}
+	
+	@Test
+	public void printsMessageToUserToPlayAgain() {
+		ui.askUserPlayAgain();
+		assertEquals("Press 'y' to play again, press anything else to quit", printStream.lastOutput());
+	}
+	
+	@Test
+	public void displaysMessageForPlayerOption() {
+		ui.askPlayerOption("one");
+		assertEquals("Please choose player one type('h' or 'c'): ", printStream.lastOutput());
+	}
+	
+	@Test
+	public void displaysMessageToEnterValidMove() {
+		ui.enterValidMove();
+		assertEquals("Please enter a valid move", printStream.lastOutput());
+	}
 }

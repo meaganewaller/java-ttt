@@ -1,12 +1,10 @@
 package com.ttt;
 
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.IOException;
 
 public class GameRunner {
-	public static void main(String[] args) {
-		Reader reader = new InputStreamReader(System.in);
-		CommandLine ui = new CommandLine(reader);
+	public static void main(String[] args) throws IOException {
+		CommandLine ui = new CommandLine();
 		Game game = new Game(ui);
 		game.playGame();
 	}
