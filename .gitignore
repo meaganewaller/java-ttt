@@ -1,1 +1,3 @@
-bin/
+bin/com/ttt/*.class
+bin/com/ttt/mocks/*.class
+.DS_Store
