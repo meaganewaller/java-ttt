@@ -1,19 +1,20 @@
 package com.ttt;
 
+import java.io.IOException;
+
 public interface UserInterface {
 	void welcomeMessage();
 	void endGame();
 	void displayBoard(Board board);
 	void displayResult(String result);
 	
-	String askFirstPlayerOption();
-	String askSecondPlayerOption();
-	String getPlayerOptionInput();
-	String getBoardOptionInput();
+	String askFirstPlayerOption() throws IOException;
+	String askSecondPlayerOption() throws IOException;
 	
-	int askBoardSize();
-	int askPlayerMove();
+	int askBoardSize() throws NumberFormatException, IOException;
+	int askPlayerMove() throws NumberFormatException, IOException;
 	
-	boolean askPlayAgain();
+	boolean askPlayAgain() throws IOException;
+	void enterValidMove();
 
 }
