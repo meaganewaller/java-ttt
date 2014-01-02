@@ -39,6 +39,12 @@ public class BoardTest {
 	}
 	
 	@Test
+	public void canSetSpaces() {
+		board.setSpaces("XX---O---");
+		assertEquals("XX---O---", board.getSpaces());
+	}
+	
+	@Test
 	public void setsXMove() {
 		board.setMove('X', 5);
 		assertEquals("----X----", board.getSpaces());
